@@ -1,0 +1,13 @@
+__pycache__/
+
+# Ignore VSCode server files
+.vscode/
+.vscode-server/
+
+# Ignore Python virtual environments
+myenv/
+
+# General system files
+*.log
+*.pyc
+__pycache__/
