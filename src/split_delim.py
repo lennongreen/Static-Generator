@@ -29,7 +29,7 @@ def split_nodes_delimiter(old_nodes, delimiter, text_type):
 
                     mid = edit[:second_delim]
 
-                    if mid == 0 or not mid.strip():
+                    if not mid.strip():
                         raise Exception("Empty content between delimiters")
 
                     before = remaining_text[:first_delim] 
@@ -41,5 +41,6 @@ def split_nodes_delimiter(old_nodes, delimiter, text_type):
                     new_nodes.append(TextNode(mid, text_type))
                     remaining_text = after
     return new_nodes
+
 
 

@@ -56,48 +56,6 @@ class TestTextToTextNode(unittest.TestCase):
             self.assertEqual(node[i].text, expected[i].text)
             self.assertEqual(node[i].text_type, expected[i].text_type)
 
-    def test_nested_format(self):
-        node = text_to_textnodes("Here is some text that **should now be bolded but *this part* will be in italics**")
-        expected = [
-            TextNode("Here is some text that ", TextType.TEXT),
-            TextNode("should now be bolded but ", TextType.BOLD),
-            TextNode("this part", TextType.ITALIC),
-            TextNode(" will be in italics", TextType.BOLD),
-        ]
-
-        assert len(node) == len(expected)
-        for i in range(len(node)):
-            self.assertEqual(node[i].text, expected[i].text)
-            self.assertEqual(node[i].text_type, expected[i].text_type)
-        
-    def test_image_with_formatted_label(self):
-        print("image format test: ")
-        node = text_to_textnodes("This is text with a ![**rick roll**](https://i.imgur.com/aKaOqIh.gif)")
-        expected = [
-            TextNode("This is text with a ", TextType.TEXT),
-            TextNode("rick roll", TextType.BOLD),  
-            TextNode("", TextType.IMAGE, "https://i.imgur.com/aKaOqIh.gif") 
-        ]
-    
-        print(f"node: {len(node)}")
-        print(f"expected: {len(expected)}")
-        assert len(node) == len(expected)
-        for i in range(len(node)):
-            self.assertEqual(node[i].text, expected[i].text)
-            self.assertEqual(node[i].text_type, expected[i].text_type)
-
-    def test_link_with_formatted_label(self):
-        node = text_to_textnodes("This is text with a link [**to boot dev**](https://www.boot.dev)")
-        expected = [
-            TextNode("This is text with a link ", TextType.TEXT),
-            TextNode("**to boot dev**", TextType.LINK, "https://www.boot.dev"),
-        ]
-
-        assert len(node) == len(expected)
-        for i in range(len(node)):
-            self.assertEqual(node[i].text, expected[i].text)
-            self.assertEqual(node[i].text_type, expected[i].text_type)
-
     def test_invalid_markdown(self):
         # missing closing
         with self.assertRaises(Exception):

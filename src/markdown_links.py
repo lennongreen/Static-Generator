@@ -15,6 +15,10 @@ def extract_markdown_images(text):
     if re.search(r"!\[([^\[\]]*)\]\((?![^\(\)]+\))", text):
         raise Exception("open parentheses after image alt")
     
+    # Check for open square Brackets
+    if text.count('[') != text.count(']'):
+        raise Exception("mismatched square brackets")
+    
     # If all validation passes, proceed with your existing pattern
     return re.findall(r"!\[([^\[\]]*)\]\(([^\(\)]*)\)", text)
 
@@ -30,23 +34,13 @@ def extract_markdown_links(text):
     # Check for partial parentheses
     if re.search(r"\[([^\[\]]+)\]\((?![^\(\)]+\))", text):
         raise Exception("open parentheses after link text")
+    
+    # Check for open square Brackets
+    if text.count('[') != text.count(']'):
+        raise Exception("mismatched square brackets")
 
     # If all validation passes, proceed with your existing pattern
     return re.findall(r"(?<!!)\[([^\[\]]*)\]\(([^\(\)]*)\)", text)
-
-
-def inner_nodes(text, final_list):
-    remaining_text = text
-    test_nodes = [TextNode(remaining_text, TextType.TEXT)]
-    test_nodes = split_nodes_delimiter(test_nodes, "**", TextType.BOLD)
-    print(f"test_nodes after bold: {test_nodes}")
-    test_nodes = split_nodes_delimiter(test_nodes, "*", TextType.ITALIC)
-    test_nodes = split_nodes_delimiter(test_nodes, "`", TextType.CODE)
-
-    for node in test_nodes:
-        final_list.append(node)
-
-    return remaining_text
 
 def split_nodes_image(old_nodes):
     final_list = []
@@ -59,28 +53,25 @@ def split_nodes_image(old_nodes):
 
         text = node.text    
         image_sections = extract_markdown_images(text)
-        remaining_text = text
+        
 
         if not image_sections:
             final_list.append(TextNode(text, TextType.TEXT))
-        else:
+            continue
+        
+        remaining_text = text
+        for image in image_sections:
+            image_alt, image_link = image
+                
+            image_section, remaining_text = remaining_text.split(f"![{image_alt}]({image_link})", 1)
 
-            for image in image_sections:
-                image_alt, image_link = image
-                    
-                image_section, remaining_text = remaining_text.split(f"![{image_alt}]({image_link})", 1)
+            if image_section:
+                final_list.append(TextNode(image_section, TextType.TEXT))
+            
+            final_list.append(TextNode(image_alt, TextType.IMAGE, image_link))
 
-                if image_section:
-                    final_list.append(TextNode(image_section, TextType.TEXT))
-
-                # check for inside nodes
-                print(f"image_alt: {image_alt}")
-                remaining_text = inner_nodes(image_alt, final_list)
-                print(f"remaining text: {remaining_text}")
-                final_list.append(TextNode(image_alt, TextType.IMAGE, image_link))
-
-            if remaining_text:
-                final_list.append(TextNode(remaining_text, TextType.TEXT))
+        if remaining_text:
+            final_list.append(TextNode(remaining_text, TextType.TEXT))
 
     return final_list
 
@@ -99,19 +90,21 @@ def split_nodes_link(old_nodes):
 
         if not link_sections:
             final_list.append(TextNode(text, TextType.TEXT))
-        else:
+            continue
 
-            for link in link_sections:
-                link_text, link_url = link
+        for link in link_sections:
+            link_text, link_url = link
 
-                text_section, remaining_text = remaining_text.split(f"[{link_text}]({link_url})", 1)
+            text_section, remaining_text = remaining_text.split(f"[{link_text}]({link_url})", 1)
 
-                if text_section:
-                    final_list.append(TextNode(text_section, TextType.TEXT))
+            if text_section:
+                final_list.append(TextNode(text_section, TextType.TEXT))
 
-                final_list.append(TextNode(link_text, TextType.LINK, link_url))
+            final_list.append(TextNode(link_text, TextType.LINK, link_url))
 
-            if remaining_text:
-                final_list.append(TextNode(remaining_text, TextType.TEXT))
+        if remaining_text:
+            final_list.append(TextNode(remaining_text, TextType.TEXT))
 
     return final_list
+
+
