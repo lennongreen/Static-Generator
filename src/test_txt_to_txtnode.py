@@ -95,10 +95,12 @@ class TestTextToTextNode(unittest.TestCase):
         test_string1 = "### This is a heading"
         test_string2 = "# This is a heading"
         test_string3 = "###### This is a heading"
-        expected = "heading"
-        self.assertEqual(block_to_block_type(test_string1), expected)
-        self.assertEqual(block_to_block_type(test_string2), expected)
-        self.assertEqual(block_to_block_type(test_string3), expected)
+        result1 = "heading 3"
+        result2 = "heading 1"
+        result3 = "heading 6"
+        self.assertEqual(block_to_block_type(test_string1), result1)
+        self.assertEqual(block_to_block_type(test_string2), result2)
+        self.assertEqual(block_to_block_type(test_string3), result3)
 
     def test_paragraph(self):
         test_string = "This is a paragraph"

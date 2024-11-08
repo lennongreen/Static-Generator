@@ -17,7 +17,7 @@ def markdown_to_block(markdown):
     current_block = []
 
     for line in lines:
-         # strip leading/trailing whitespace from each block
+        # strip leading/trailing whitespace from each block
         line = line.strip()
 
         # Remove any "empty" blcoks due to excessive newlines
@@ -38,8 +38,11 @@ def markdown_to_block(markdown):
 
 def block_to_block_type(block):
     
-    if re.match(r"^#{1,6} .+", block):
-        return "heading"
+    for i in range(1, 7):
+        pattern = rf"^#{{{i}}} .+"
+        if re.match(pattern, block):
+            
+            return f"heading {i}"
 
     if re.match(r"^\`{3}[\s\S]*\`{3}$", block):
         return "code"
