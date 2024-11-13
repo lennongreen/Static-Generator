@@ -1,6 +1,6 @@
 import re
-from textnode import *
-from split_delim import *
+from .textnode import *
+from .split_delim import *
 
 def extract_markdown_images(text):
     # Check for image with no link

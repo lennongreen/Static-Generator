@@ -1,6 +1,6 @@
 import unittest
-from  htmlnode import *
-from textnode import *
+from  .htmlnode import *
+from .textnode import *
 
 class TestHTMLNode(unittest.TestCase):
     # creation tests

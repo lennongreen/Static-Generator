@@ -1,7 +1,8 @@
-
 from static import *
 import os
 import shutil
+from src.markdown_to_html import *
+from src.htmlnode import *
 
 def copy_content(item_path, destination_dir):
     # check if destination exists, if not create
@@ -47,7 +48,24 @@ def extract_title(markdown):
 def generate_page(from_path, template_path, dest_path):
     print(f"Generating page from {from_path} to {dest_path} using {template_path}")
     
-    with open(from_path, "r", )
+    with open(from_path, "r", encoding="utf-8") as markdown_file:
+        markdown_content = markdown_file.read()
+
+    with open(template_path, "r", encoding="utf-8") as template_path_file:
+        template_content = template_path_file.read()
+    
+    html_node = markdown_to_html_node(markdown_content)
+    markdown_html = html_node.to_html()
+    title = extract_title(markdown_content)
+
+    content = template_content.replace("{{ Title }}", title)
+    content = content.replace("{{ Content }}", markdown_html)
+
+    os.makedirs(os.path.dirname(dest_path), exist_ok=True)
+
+    with open(dest_path, "w", encoding="utf-8") as dest_file:
+        dest_file.write(content)
+
 
 def main():
 
@@ -59,6 +77,9 @@ def main():
         item_path = os.path.join("static", item)
         print(f"Processing item: {item_path}")
         copy_content(item_path, "public")
+
+    generate_page("content/index.md", "template.html", "public/index.html")
+    print(f"Page generated at public/index.html")
 
 
 if __name__ == "__main__":

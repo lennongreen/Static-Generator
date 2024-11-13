@@ -1,5 +1,5 @@
 import unittest
-from markdown_links import *
+from .markdown_links import *
 
 class TestExtraxtLinksImages(unittest.TestCase):
     # helper tests

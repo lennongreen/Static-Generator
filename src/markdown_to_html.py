@@ -1,6 +1,6 @@
-from htmlnode import *
-from text_to_textnode import *
-from textnode import *
+from .htmlnode import *
+from .text_to_textnode import *
+from .textnode import *
 
 def text_to_tag(text, is_child=False):
 
@@ -68,14 +68,14 @@ def create_child_list(custom_list, parent_block_type):
 
     children_list = []
     for item in custom_list:
-        children_list.append(ParentNode(text_to_tag(parent_block_type, True), "", markdown_to_leafnodes(item)))
+        children_list.append(ParentNode(text_to_tag(parent_block_type, True), markdown_to_leafnodes(item)))
     return children_list
 
 def markdown_to_html_node(markdown):
     # split markdown into blocks using markdown_to_blocks
     blocks = markdown_to_block(markdown)
 
-    grand_parent = HTMLNode("div", "", children = [])
+    grand_parent = ParentNode("div", [])
 
     # loop over each block child
     for block in blocks:
@@ -89,11 +89,11 @@ def markdown_to_html_node(markdown):
         # create HtmlNode with proper type and data
         if block_type == "unordered_list" or block_type == "ordered_list":
             temp_list = trimmed_block.split("\n")
-            child = ParentNode(tag, "" , create_child_list(temp_list, block_type))
+            child = ParentNode(tag, create_child_list(temp_list, block_type))
         elif block_type == "code":
-            child = ParentNode(tag, "" ,[ParentNode("code", "" , markdown_to_leafnodes(trimmed_block))])
+            child = ParentNode(tag ,[ParentNode("code", markdown_to_leafnodes(trimmed_block))])
         else: 
-            child = ParentNode(tag, "", markdown_to_leafnodes(trimmed_block))
+            child = ParentNode(tag, markdown_to_leafnodes(trimmed_block))
         
         # Assign proper child HTMLNode objects to block node
         grand_parent.children.append(child)

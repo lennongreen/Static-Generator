@@ -1,6 +1,6 @@
 import unittest
-from markdown_to_html import *
-from htmlnode import *
+from .markdown_to_html import *
+from .htmlnode import *
 
 class TestMarkdowntoHTML(unittest.TestCase):
     # tests for text_to_tag
@@ -141,13 +141,12 @@ class TestMarkdowntoHTML(unittest.TestCase):
                 - Third item
 
         """
-        expected = HTMLNode(
+        expected = ParentNode(
 
                 "div",
-                "",
                 [
-                    ParentNode("h1", "" , [LeafNode(None,"Heading 1")]),
-                    ParentNode("p", "", [
+                    ParentNode("h1" , [LeafNode(None,"Heading 1")]),
+                    ParentNode("p", [
 
                             LeafNode( None,"Here's a paragraph with "),
                             LeafNode("i" , "italic"),
@@ -157,18 +156,17 @@ class TestMarkdowntoHTML(unittest.TestCase):
                     
                     ]
                     ),
-                    ParentNode("blockquote", "" , [LeafNode(None,"A blockquote with a line.")]),
+                    ParentNode("blockquote" , [LeafNode(None,"A blockquote with a line.")]),
                     ParentNode(
 
                         "ul",
-                        "",
                         [
-                            ParentNode("li", "" , [LeafNode(None,"First item in an unordered list")]),
-                            ParentNode("li", "" , [LeafNode(None,"Second item")]),
-                            ParentNode("li", "" , [LeafNode(None,"Third item")])
+                            ParentNode("li", [LeafNode(None,"First item in an unordered list")]),
+                            ParentNode("li", [LeafNode(None,"Second item")]),
+                            ParentNode("li", [LeafNode(None,"Third item")])
                         ]
                     )
-                ],
+                ]
             )
         
         testing_html = markdown_to_html_node(markdown) 
