@@ -1,6 +1,6 @@
-from .markdown_links import *
-from .split_delim import *
-from .textnode import *
+from markdown_links import *
+from split_delim import *
+from textnode import *
 
 def text_to_textnodes(text):
     nodes = [TextNode(text, TextType.TEXT)]

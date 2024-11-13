@@ -1,6 +1,6 @@
 import unittest
-from .markdown_to_html import *
-from .htmlnode import *
+from markdown_to_html import *
+from htmlnode import *
 
 class TestMarkdowntoHTML(unittest.TestCase):
     # tests for text_to_tag

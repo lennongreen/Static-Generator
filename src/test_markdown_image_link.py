@@ -1,5 +1,5 @@
 import unittest
-from .markdown_links import *
+from markdown_links import *
 
 class TestExtraxtLinksImages(unittest.TestCase):
     # helper tests
@@ -26,6 +26,21 @@ class TestExtraxtLinksImages(unittest.TestCase):
         test_tuple = extract_markdown_images("This is text with a link [to boot dev](https://www.boot.dev) and [to youtube](https://www.youtube.com/@bootdotdev)")
         expected = ()
         assert len(test_tuple) == len(expected)
+
+    def test_given_examples(self):
+        text1 = "[Back Home](/)"
+        text2 = "[wiki here](https://example.com)"
+        text3 = "![image](image.jpg)"  # This should be ignored
+
+        test1_tuple = extract_markdown_links(text1)
+        test2_tuple = extract_markdown_links(text2)
+        test3_tuple = extract_markdown_links(text3)
+        print(f"test 1: {test1_tuple} with type {type(test1_tuple)}")
+        print(f"test 2: {test2_tuple} with type {type(test2_tuple)}")
+        print(f"test 3: {test3_tuple} with type {type(test3_tuple)}")
+        self.assertTupleEqual(test1_tuple, ("Back Home","/"))
+        self.assertTupleEqual(test2_tuple, ("wiki here","https://example.com"))
+        self.assertTupleEqual(test3_tuple, ())
 
     # splitting tests
 

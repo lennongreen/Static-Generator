@@ -1,6 +1,6 @@
 import re
-from .textnode import *
-from .split_delim import *
+from textnode import *
+from split_delim import *
 
 def extract_markdown_images(text):
     # Check for image with no link
@@ -20,7 +20,9 @@ def extract_markdown_images(text):
         raise Exception("mismatched square brackets")
     
     # If all validation passes, proceed with your existing pattern
-    return re.findall(r"!\[([^\[\]]*)\]\(([^\(\)]*)\)", text)
+    matches = re.findall(r"!\[([^\[\]]*)\]\(([^\(\)]*)\)", text)
+    if matches:
+        return matches[0]
 
 def extract_markdown_links(text):
     # Check for link with no URL
@@ -40,7 +42,9 @@ def extract_markdown_links(text):
         raise Exception("mismatched square brackets")
 
     # If all validation passes, proceed with your existing pattern
-    return re.findall(r"(?<!!)\[([^\[\]]*)\]\(([^\(\)]*)\)", text)
+    matches = re.findall(r"(?<!!)\[([^\[\]]*)\]\(([^\(\)]*)\)", text)
+    if matches:
+        return matches[0]  # returns first match as a tuple
 
 def split_nodes_image(old_nodes):
     final_list = []

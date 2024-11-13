@@ -1,6 +1,6 @@
 import unittest
-from .split_delim import *
-from .textnode import *
+from split_delim import *
+from textnode import *
 
 class TestMarkDown(unittest.TestCase):
 
