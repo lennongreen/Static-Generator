@@ -11,5 +11,3 @@ myenv/
 *.log
 *.pyc
 __pycache__/
-
-public/
