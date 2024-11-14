@@ -56,9 +56,9 @@ class TestMarkdowntoHTML(unittest.TestCase):
         test_list = ["First Item", "Second Item", "Third Item"]
         expected = [
 
-            ParentNode("li", "" ,[LeafNode(None, "First Item")]),
-            ParentNode("li", "" , [LeafNode(None, "Second Item")]),
-            ParentNode("li", "" ,[LeafNode(None, "Third Item")])
+            ParentNode("li", [LeafNode(None, "First Item")]),
+            ParentNode("li", [LeafNode(None, "Second Item")]),
+            ParentNode("li", [LeafNode(None, "Third Item")])
 
         ]
         self.assertEqual(create_child_list(test_list, "unordered_list"), expected)
@@ -67,10 +67,10 @@ class TestMarkdowntoHTML(unittest.TestCase):
         test_list = ["First Item", "Second Item", "Third Item", "Fourth Item"]
         expected = [
 
-            ParentNode("li", "" ,[LeafNode(None, "First Item")]),
-            ParentNode("li", "" , [LeafNode(None, "Second Item")]),
-            ParentNode("li", "" ,[LeafNode(None, "Third Item")]),
-            ParentNode("li", "" ,[LeafNode(None, "Fourth Item")])
+            ParentNode("li", [LeafNode(None, "First Item")]),
+            ParentNode("li", [LeafNode(None, "Second Item")]),
+            ParentNode("li", [LeafNode(None, "Third Item")]),
+            ParentNode("li", [LeafNode(None, "Fourth Item")])
 
         ]
         self.assertEqual(create_child_list(test_list, "ordered_list"), expected)
@@ -78,7 +78,7 @@ class TestMarkdowntoHTML(unittest.TestCase):
     def test_no_children(self):
         test_string = "First Item and only item"
         expected = [
-             ParentNode("li", "" ,[LeafNode(None, "First Item and only item")]),
+             ParentNode("li", [LeafNode(None, "First Item and only item")]),
         ]
         self.assertEqual(create_child_list([test_string], "unordered_list"), expected)
 

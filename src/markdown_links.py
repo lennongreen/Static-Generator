@@ -20,9 +20,8 @@ def extract_markdown_images(text):
         raise Exception("mismatched square brackets")
     
     # If all validation passes, proceed with your existing pattern
-    matches = re.findall(r"!\[([^\[\]]*)\]\(([^\(\)]*)\)", text)
-    if matches:
-        return matches[0]
+    return re.findall(r"!\[([^\[\]]*)\]\(([^\(\)]*)\)", text)
+   
 
 def extract_markdown_links(text):
     # Check for link with no URL
@@ -42,9 +41,7 @@ def extract_markdown_links(text):
         raise Exception("mismatched square brackets")
 
     # If all validation passes, proceed with your existing pattern
-    matches = re.findall(r"(?<!!)\[([^\[\]]*)\]\(([^\(\)]*)\)", text)
-    if matches:
-        return matches[0]  # returns first match as a tuple
+    return re.findall(r"(?<!!)\[([^\[\]]*)\]\(([^\(\)]*)\)", text)  # returns list of tuples
 
 def split_nodes_image(old_nodes):
     final_list = []
@@ -57,13 +54,12 @@ def split_nodes_image(old_nodes):
 
         text = node.text    
         image_sections = extract_markdown_images(text)
-        
+        remaining_text = text
 
         if not image_sections:
             final_list.append(TextNode(text, TextType.TEXT))
             continue
-        
-        remaining_text = text
+
         for image in image_sections:
             image_alt, image_link = image
                 
@@ -71,7 +67,7 @@ def split_nodes_image(old_nodes):
 
             if image_section:
                 final_list.append(TextNode(image_section, TextType.TEXT))
-            
+
             final_list.append(TextNode(image_alt, TextType.IMAGE, image_link))
 
         if remaining_text:
@@ -110,5 +106,3 @@ def split_nodes_link(old_nodes):
             final_list.append(TextNode(remaining_text, TextType.TEXT))
 
     return final_list
-
-
