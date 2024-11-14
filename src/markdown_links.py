@@ -1,6 +1,6 @@
 import re
-from textnode import *
-from split_delim import *
+from .textnode import *
+from .split_delim import *
 
 def extract_markdown_images(text):
     # Check for image with no link
@@ -25,7 +25,8 @@ def extract_markdown_images(text):
 
 def extract_markdown_links(text):
     # Check for link with no URL
-    if re.search(r"\[([^\[\]]+)\](?!\()", text):
+    if re.search(r"\[(?![\s\]])([^\[\]]+)\](?!\()", text):
+        print(f"text: {text}")
         raise Exception("missing link url attribute")
     
     # Check for link with no text (both empty URL and with URL)

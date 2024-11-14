@@ -6,33 +6,26 @@ from src.htmlnode import *
 
 def copy_content(item_path, destination_dir):
     # check if destination exists, if not create
-    if not os.path.exists(destination_dir):
-        print("deleting existing path") 
+    if not os.path.exists(destination_dir): 
         os.mkdir(destination_dir)
 
     #create current item path
     base_name = os.path.basename(item_path)
-    print(f"base name: {base_name}")
+
     # Create destination to copy to 
     destination_path = os.path.join(destination_dir, base_name)
-    print(f"destination_path {destination_path}")
 
     # Copy based on if file or directory
     if os.path.isfile(item_path):
-        print(f"Copying: {item_path} to {destination_dir}")
         shutil.copy(item_path, destination_path)
     else: 
-
-        print(f"Handling directory: {item_path} -> {destination_path}")
         # Clean up destination before copy
         if os.path.exists(destination_path) and os.path.isdir(destination_path):
-            print(f"{destination_path} already existed, deleting")
             shutil.rmtree(destination_path)
 
         os.mkdir(destination_path)
         for sub_item in os.listdir(item_path):
             sub_path = os.path.join(item_path, sub_item)
-            print(f"calling copy_content for {sub_path} and {destination_path}")
             copy_content(sub_path, destination_path)
         
 
@@ -48,6 +41,10 @@ def extract_title(markdown):
 def generate_page(from_path, template_path, dest_path):
     print(f"Generating page from {from_path} to {dest_path} using {template_path}")
     
+    #base_name = os.path.basename(from_path)
+    #base_name_new = base_name.replace(".md", ".html")
+    #from_path = from_path.replace(base_name, base_name_new)
+
     with open(from_path, "r", encoding="utf-8") as markdown_file:
         markdown_content = markdown_file.read()
 
@@ -74,12 +71,14 @@ def generate_page_recursive(dir_path_content, template_path, dest_dir_path):
 
         full_path = os.path.join(dir_path_content , file)
         base_name = os.path.basename(full_path)
+        destination_path = os.path.join(dest_dir_path, base_name)
 
         if os.path.isfile(full_path):
             if base_name.endswith(".md"):
-                generate_page(full_path, template_path, dest_dir_path)
+                print(f"passing {full_path} as file")
+                destination_path = destination_path.replace(".md", ".html")
+                generate_page(full_path, template_path, destination_path)
         elif os.path.isdir(full_path):
-            destination_path = os.path.join(dest_dir_path, base_name)
             if not os.path.exists(destination_path):
                 os.makedirs(destination_path, exist_ok=True)
             generate_page_recursive(full_path, template_path, destination_path)
@@ -94,11 +93,10 @@ def main():
 
     for item in os.listdir("static"):
         item_path = os.path.join("static", item)
-        print(f"Processing item: {item_path}")
         copy_content(item_path, "public")
 
     generate_page_recursive("content", "template.html", "public")
-    print(f"Page generated at public/index.html")
+    print(f"Page generated at public")
 
 
 if __name__ == "__main__":

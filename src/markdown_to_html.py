@@ -1,6 +1,6 @@
-from htmlnode import *
-from text_to_textnode import *
-from textnode import *
+from .htmlnode import *
+from .text_to_textnode import *
+from .textnode import *
 
 def text_to_tag(text, is_child=False):
 
